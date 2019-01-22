@@ -1,4 +1,4 @@
-TARGET=cuckatoo
+TARGET=siphash
 .PHONY: $(TARGET)
 RTLSRC=../rtl
 all: $(TARGET)
