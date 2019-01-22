@@ -6,9 +6,9 @@
 // Latency is 10 clock cycles, and then one siphash result per cycle.
 //
 
-module siphash_top (CLOCK, reset_n, we, cs, key, nonce, done, result);
+module siphash_top (clk, reset_n, we, cs, key, nonce, done, result);
 	
-	input 					CLOCK;
+	input 					clk;
 	input					reset_n;
 	input					we;
 	input			[255:0] key;
@@ -28,7 +28,7 @@ module siphash_top (CLOCK, reset_n, we, cs, key, nonce, done, result);
 	assign result = reg_result;
 	assign done = reg_done;
 
-	always @(posedge CLOCK) begin : latch_nonce_and_key
+	always @(posedge clk) begin : latch_nonce_and_key
 		if (~reset_n)
 		begin
 			reg_nonce <= 0;
@@ -41,7 +41,7 @@ module siphash_top (CLOCK, reset_n, we, cs, key, nonce, done, result);
 		end
 	end
 
-	always @(posedge CLOCK) begin : set_result
+	always @(posedge clk) begin : set_result
 		if (~reset_n)
 		begin
 			counter <= 0;
@@ -67,7 +67,7 @@ module siphash_top (CLOCK, reset_n, we, cs, key, nonce, done, result);
 	reg	[63:0]	s1_v0, s1_v1, s1_v2, s1_v3;
 	reg [63:0]	s1_nonce;
 
-	always @(posedge CLOCK) begin : stage_1
+	always @(posedge clk) begin : stage_1
 		if (~reset_n)
 		begin
 			s1_v0 <= 0;
@@ -92,7 +92,7 @@ module siphash_top (CLOCK, reset_n, we, cs, key, nonce, done, result);
 	reg	[63:0]	s2_v0, s2_v1, s2_v2, s2_v3;
 	reg [63:0]	s2_nonce;
 
-	always @(posedge CLOCK) begin : stage_2
+	always @(posedge clk) begin : stage_2
 		if (~reset_n)
 		begin
 			s2_v0 <= 0;
@@ -117,7 +117,7 @@ module siphash_top (CLOCK, reset_n, we, cs, key, nonce, done, result);
 	reg	[63:0]	s3_v0, s3_v1, s3_v2, s3_v3;
 	reg [63:0]	s3_nonce;
 
-	always @(posedge CLOCK) begin : stage_3
+	always @(posedge clk) begin : stage_3
 		if (~reset_n)
 		begin
 			s3_v0 = 0;
@@ -133,7 +133,7 @@ module siphash_top (CLOCK, reset_n, we, cs, key, nonce, done, result);
 	end
 
 	sipround sr11(
-		.clk(CLOCK), 
+		.clk(clk), 
 		.reset_n(reset_n),
 		
 		.iv0(s2_v0),
@@ -152,7 +152,7 @@ module siphash_top (CLOCK, reset_n, we, cs, key, nonce, done, result);
 	reg	[63:0]	s4_v0, s4_v1, s4_v2, s4_v3;
 	reg [63:0]	s4_nonce;	
 
-	always @(posedge CLOCK) begin : stage_4
+	always @(posedge clk) begin : stage_4
 		if (~reset_n)
 		begin
 			s4_v0 = 0;
@@ -168,7 +168,7 @@ module siphash_top (CLOCK, reset_n, we, cs, key, nonce, done, result);
 	end
 
 	sipround sr12(
-		.clk(CLOCK), 
+		.clk(clk), 
 		.reset_n(reset_n),
 		
 		.iv0(s3_v0),
@@ -185,7 +185,7 @@ module siphash_top (CLOCK, reset_n, we, cs, key, nonce, done, result);
 	// ======== STAGE 5: XOR v0 with nonce and v2 with 0xff ========
 	reg	[63:0]	s5_v0, s5_v1, s5_v2, s5_v3;
 
-	always @(posedge CLOCK) begin : stage_5
+	always @(posedge clk) begin : stage_5
 		if (~reset_n)
 		begin
 			s5_v0 <= 0;
@@ -204,7 +204,7 @@ module siphash_top (CLOCK, reset_n, we, cs, key, nonce, done, result);
 	// ======== STAGE 6: SipRound #1 ========
 
 	reg	[63:0]	s6_v0, s6_v1, s6_v2, s6_v3;
-	always @(posedge CLOCK) begin : stage_6
+	always @(posedge clk) begin : stage_6
 		if (~reset_n)
 		begin
 			s6_v0 = 0;
@@ -215,7 +215,7 @@ module siphash_top (CLOCK, reset_n, we, cs, key, nonce, done, result);
 	end
 
 	sipround sr21(
-		.clk(CLOCK), 
+		.clk(clk), 
 		.reset_n(reset_n),
 		
 		.iv0(s5_v0),
@@ -232,7 +232,7 @@ module siphash_top (CLOCK, reset_n, we, cs, key, nonce, done, result);
 	// ======== STAGE 7: SipRound #2 ========
 
 	reg	[63:0]	s7_v0, s7_v1, s7_v2, s7_v3;
-	always @(posedge CLOCK) begin : stage_7
+	always @(posedge clk) begin : stage_7
 		if (~reset_n)
 		begin
 			s7_v0 = 0;
@@ -243,7 +243,7 @@ module siphash_top (CLOCK, reset_n, we, cs, key, nonce, done, result);
 	end
 
 	sipround sr22(
-		.clk(CLOCK), 
+		.clk(clk), 
 		.reset_n(reset_n),
 		
 		.iv0(s6_v0),
@@ -260,7 +260,7 @@ module siphash_top (CLOCK, reset_n, we, cs, key, nonce, done, result);
 	// ======== STAGE 8: SipRound #3 ========
 
 	reg	[63:0]	s8_v0, s8_v1, s8_v2, s8_v3;
-	always @(posedge CLOCK) begin : stage_8
+	always @(posedge clk) begin : stage_8
 		if (~reset_n)
 		begin
 			s8_v0 = 0;
@@ -271,7 +271,7 @@ module siphash_top (CLOCK, reset_n, we, cs, key, nonce, done, result);
 	end
 
 	sipround sr23(
-		.clk(CLOCK), 
+		.clk(clk), 
 		.reset_n(reset_n),
 		
 		.iv0(s7_v0),
@@ -288,7 +288,7 @@ module siphash_top (CLOCK, reset_n, we, cs, key, nonce, done, result);
 	// ======== STAGE 9: SipRound #4 ========
 
 	reg	[63:0]	s9_v0, s9_v1, s9_v2, s9_v3;
-	always @(posedge CLOCK) begin : stage_9
+	always @(posedge clk) begin : stage_9
 		if (~reset_n)
 		begin
 			s9_v0 = 0;
@@ -299,7 +299,7 @@ module siphash_top (CLOCK, reset_n, we, cs, key, nonce, done, result);
 	end
 
 	sipround sr24(
-		.clk(CLOCK),
+		.clk(clk),
 		.reset_n(reset_n),
 		
 		.iv0(s8_v0),

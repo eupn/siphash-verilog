@@ -42,15 +42,15 @@ int main(int argc, char** argv)
     }
 
     // Start with reset and manually toggling clock line
-    uut->CLOCK = 0;
+    uut->clk = 0;
     uut->reset_n = 0;
     uut->eval();
 
-    uut->CLOCK = 1;
+    uut->clk = 1;
     uut->eval();
 
     uut->reset_n = 1;
-    uut->CLOCK = 0;
+    uut->clk = 0;
     uut->eval();
 
     // Setup siphash keys
@@ -70,39 +70,39 @@ int main(int argc, char** argv)
     uut->nonce = nonces[0]; 
     uut->we=1;    
 
-    uut->CLOCK = 1;
+    uut->clk = 1;
     uut->eval();
     
     uut->cs = 1;
 
-    uut->CLOCK = 0;
+    uut->clk = 0;
     uut->eval();
     tfp->dump (main_time++);
 
     uut->nonce = nonces[1]; 
 
-    uut->CLOCK = 1;
+    uut->clk = 1;
     uut->eval();
     tfp->dump (main_time++);
 
-    uut->CLOCK = 0;
+    uut->clk = 0;
     uut->eval();
     tfp->dump (main_time++);
 
     uut->nonce = nonces[2]; 
 
-    uut->CLOCK = 1;
+    uut->clk = 1;
     uut->eval();
     tfp->dump (main_time++);
 
     uut->we = 0;
 
     for (int i = 0; i < 10; i++) {
-        uut->CLOCK = 0;
+        uut->clk = 0;
         uut->eval();
         tfp->dump (main_time++);
 
-        uut->CLOCK = 1;
+        uut->clk = 1;
         uut->eval();
         tfp->dump (main_time++);
 
@@ -114,11 +114,11 @@ int main(int argc, char** argv)
     // Do dummy clock cycles (not required)
 
     for (int i = 0; i < 10; i++) {
-        uut->CLOCK = 0;
+        uut->clk = 0;
         uut->eval();
         tfp->dump (main_time++);
 
-        uut->CLOCK = 1;
+        uut->clk = 1;
         uut->eval();
         tfp->dump (main_time++);
     }
