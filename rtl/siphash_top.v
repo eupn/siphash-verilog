@@ -115,26 +115,15 @@ module siphash_top (clk, reset_n, we, cs, key, nonce, done, result);
     // ======== STAGE 3: SipRound #1 ========
 
     reg [63:0]    s3_v0, s3_v1, s3_v2, s3_v3;
-    reg [63:0]    s3_out_v0, s3_out_v1, s3_out_v2, s3_out_v3;
     reg [63:0]    s3_nonce;
 
     always @(posedge clk) begin : stage_3
         if (~reset_n)
         begin
-            s3_out_v0 <= 0;
-            s3_out_v1 <= 0;
-            s3_out_v2 <= 0;
-            s3_out_v3 <= 0;
-
             s3_nonce <= 0;
         end else
         begin        
             s3_nonce <= s2_nonce;
-
-            s3_out_v0 <= s3_v0;
-            s3_out_v1 <= s3_v1;
-            s3_out_v2 <= s3_v2;
-            s3_out_v3 <= s3_v3;
         end
     end
 
@@ -156,26 +145,15 @@ module siphash_top (clk, reset_n, we, cs, key, nonce, done, result);
     // ======== STAGE 4: SipRound #2 ========
 
     reg [63:0]    s4_v0, s4_v1, s4_v2, s4_v3;
-    reg [63:0]    s4_out_v0, s4_out_v1, s4_out_v2, s4_out_v3;
     reg [63:0]    s4_nonce;
 
     always @(posedge clk) begin : stage_4
         if (~reset_n)
         begin
-            s4_out_v0 <= 0;
-            s4_out_v1 <= 0;
-            s4_out_v2 <= 0;
-            s4_out_v3 <= 0;
-
             s4_nonce <= 0;
         end else
         begin
             s4_nonce <= s3_nonce;
-
-            s4_out_v0 <= s4_v0;
-            s4_out_v1 <= s4_v1;
-            s4_out_v2 <= s4_v2;
-            s4_out_v3 <= s4_v3;
         end
     end
 
@@ -216,21 +194,6 @@ module siphash_top (clk, reset_n, we, cs, key, nonce, done, result);
     // ======== STAGE 6: SipRound #1 ========
 
     reg [63:0] s6_v0, s6_v1, s6_v2, s6_v3;
-    reg [63:0] s6_out_v0, s6_out_v1, s6_out_v2, s6_out_v3;
-    always @(posedge clk) begin : stage_6
-        if (~reset_n)
-        begin
-            s6_out_v0 <= 0;
-            s6_out_v1 <= 0;
-            s6_out_v2 <= 0;
-            s6_out_v3 <= 0;
-        end else begin
-            s6_out_v0 <= s6_v0;
-            s6_out_v1 <= s6_v1;
-            s6_out_v2 <= s6_v2;
-            s6_out_v3 <= s6_v3;
-        end
-    end
 
     sipround sr21(
         .clk(clk), 
@@ -250,21 +213,6 @@ module siphash_top (clk, reset_n, we, cs, key, nonce, done, result);
     // ======== STAGE 7: SipRound #2 ========
 
     reg [63:0] s7_v0, s7_v1, s7_v2, s7_v3;
-    reg [63:0] s7_out_v0, s7_out_v1, s7_out_v2, s7_out_v3;
-    always @(posedge clk) begin : stage_7
-        if (~reset_n)
-        begin
-            s7_out_v0 <= 0;
-            s7_out_v1 <= 0;
-            s7_out_v2 <= 0;
-            s7_out_v3 <= 0;
-        end begin
-            s7_out_v0 <= s7_v0;
-            s7_out_v1 <= s7_v1;
-            s7_out_v2 <= s7_v2;
-            s7_out_v3 <= s7_v3;
-        end
-    end
 
     sipround sr22(
         .clk(clk), 
@@ -284,22 +232,6 @@ module siphash_top (clk, reset_n, we, cs, key, nonce, done, result);
     // ======== STAGE 8: SipRound #3 ========
 
     reg [63:0] s8_v0, s8_v1, s8_v2, s8_v3;
-    reg [63:0] s8_out_v0, s8_out_v1, s8_out_v2, s8_out_v3;
-    always @(posedge clk) begin : stage_8
-        if (~reset_n)
-        begin
-            s8_out_v0 <= 0;
-            s8_out_v1 <= 0;
-            s8_out_v2 <= 0;
-            s8_out_v3 <= 0;
-        end else
-        begin
-            s8_out_v0 <= s8_v0;
-            s8_out_v1 <= s8_v1;
-            s8_out_v2 <= s8_v2;
-            s8_out_v3 <= s8_v3;
-        end
-    end
 
     sipround sr23(
         .clk(clk), 
@@ -319,22 +251,6 @@ module siphash_top (clk, reset_n, we, cs, key, nonce, done, result);
     // ======== STAGE 9: SipRound #4 ========
 
     reg [63:0] s9_v0, s9_v1, s9_v2, s9_v3;
-    reg [63:0] s9_out_v0, s9_out_v1, s9_out_v2, s9_out_v3;
-    always @(posedge clk) begin : stage_9
-        if (~reset_n)
-        begin
-            s9_out_v0 <= 0;
-            s9_out_v1 <= 0;
-            s9_out_v2 <= 0;
-            s9_out_v3 <= 0;
-        end else
-        begin
-            s9_out_v0 <= s9_v0;
-            s9_out_v1 <= s9_v1;
-            s9_out_v2 <= s9_v2;
-            s9_out_v3 <= s9_v3;
-        end
-    end
 
     sipround sr24(
         .clk(clk),
