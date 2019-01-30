@@ -114,8 +114,8 @@ module siphash_top (clk, reset_n, we, cs, key, nonce, done, result);
 
     // ======== STAGE 3: SipRound #1 ========
 
-    reg [63:0]    s3_v0, s3_v1, s3_v2, s3_v3;
-    reg [63:0]    s3_nonce;
+    wire [63:0]    s3_v0, s3_v1, s3_v2, s3_v3;
+    reg  [63:0]    s3_nonce;
 
     always @(posedge clk) begin : stage_3
         if (~reset_n)
@@ -144,8 +144,8 @@ module siphash_top (clk, reset_n, we, cs, key, nonce, done, result);
 
     // ======== STAGE 4: SipRound #2 ========
 
-    reg [63:0]    s4_v0, s4_v1, s4_v2, s4_v3;
-    reg [63:0]    s4_nonce;
+    wire [63:0]    s4_v0, s4_v1, s4_v2, s4_v3;
+    reg  [63:0]    s4_nonce;
 
     always @(posedge clk) begin : stage_4
         if (~reset_n)
@@ -193,7 +193,7 @@ module siphash_top (clk, reset_n, we, cs, key, nonce, done, result);
 
     // ======== STAGE 6: SipRound #1 ========
 
-    reg [63:0] s6_v0, s6_v1, s6_v2, s6_v3;
+    wire [63:0] s6_v0, s6_v1, s6_v2, s6_v3;
 
     sipround sr21(
         .clk(clk), 
@@ -212,7 +212,7 @@ module siphash_top (clk, reset_n, we, cs, key, nonce, done, result);
 
     // ======== STAGE 7: SipRound #2 ========
 
-    reg [63:0] s7_v0, s7_v1, s7_v2, s7_v3;
+    wire [63:0] s7_v0, s7_v1, s7_v2, s7_v3;
 
     sipround sr22(
         .clk(clk), 
@@ -231,7 +231,7 @@ module siphash_top (clk, reset_n, we, cs, key, nonce, done, result);
 
     // ======== STAGE 8: SipRound #3 ========
 
-    reg [63:0] s8_v0, s8_v1, s8_v2, s8_v3;
+    wire [63:0] s8_v0, s8_v1, s8_v2, s8_v3;
 
     sipround sr23(
         .clk(clk), 
@@ -250,7 +250,7 @@ module siphash_top (clk, reset_n, we, cs, key, nonce, done, result);
 
     // ======== STAGE 9: SipRound #4 ========
 
-    reg [63:0] s9_v0, s9_v1, s9_v2, s9_v3;
+    wire [63:0] s9_v0, s9_v1, s9_v2, s9_v3;
 
     sipround sr24(
         .clk(clk),
